@@ -13,10 +13,11 @@ Read `~/.agent-state/orchestrate-agents/<repo-name>.md` (repo name = basename of
 
 ## Standing inputs
 
-Each overrides the defaults below.
-- **Fanout cap:** maximum concurrent agents. If neither user nor profile gave one, use 3 provisionally and say so in the first report. One light read-only audit may run as an extra. Subagents spawn no nested agents unless the brief allows, then at most 2.
+Each comes from the user, defaults or the profile.
+- **Fanout cap:** maximum concurrent agents. One light read-only audit may run as an extra. Subagents spawn no nested agents unless the brief allows, then at most 2.
 - **Model policy:** strongest model for design, hard implementation and spec or interface changes; a cheaper one for scoped execution (merges, CI, tooling, docs, measurement). Never exceed the model ceiling the user or defaults set. Try a new model on a contained task with clear pass/fail first. Never swap the model of work in progress.
-- **Autonomy:** never block on the user's decision. Pick the recommended option, start it and all option-independent work in the same turn, log it as provisional with what reversing it would cost, and present it for override. Ask only about what the user reserved.
+- **Decision policy:** what to do when a decision comes up: decide and log, ask and wait, split by reversibility, or the user's own rule. Under every policy, keep dispatching work the open decision does not touch, and log each decision you make (alternatives, reasoning, reversal cost) for the next report.
+- **Ask before the first dispatch** for any of fanout cap and decision policy that neither defaults nor the profile set, and save each answer where the user chooses (defaults or the profile).
 - **Stop points:** at any "checkpoint with me when X is done", stop dispatching and report.
 
 ## The loop
@@ -25,18 +26,18 @@ Each overrides the defaults below.
 - **Fixed cadence, not self-paced:** a `ScheduleWakeup` re-armed after every task notification keeps sliding and never fires while agents are busy, so check-ins stop. Agent notifications are handled as they arrive; the cron tick still posts the full report on time. Delete the cron job at a stop point or when done, and say so.
 - **Each tick:**
   1. Inspect cheaply: `git fetch`, each branch's recent log, `git status` in each worktree, log mtimes and processes. Never read a running agent's transcript. Stop orphaned processes and containers left by finished agents.
-  2. Compare each agent with its expected first commit and handoff time. Behind without activity: one steering message, specific and short; still silent ~10 minutes later: stop it and restart on the same model. Behind because scope grew: re-scope or split.
+  2. At dispatch, log each agent's estimated first-commit and handoff times in the ledger. Each tick, diff actual against estimate, track your estimate bias over the effort, and rescale remaining estimates by it. Behind without activity: one steering message, specific and short; still silent ~10 minutes later: stop it and restart on the same model. Behind because scope grew: re-scope or split.
   3. Handle finished work (below).
   4. Simplify: stop or defer gates, items, batches and checks that no longer change the outcome, plans built on a false assumption, and deferrable scope; merge batches that can be one. Log each cut with the wall time it saves.
   5. Find multipliers: a per-step cost that repeats across remaining items (CI minutes, merge churn, check time, review rounds). Any check over 10 minutes is a defect to fix, not a timeout to raise. If fixing it saves more wall time than it costs, dispatch it now, ahead of feature work.
-  6. Fill free slots with unblocked, non-conflicting work on the critical path; leave a slot idle rather than dispatch into a conflict.
+  6. Fill free slots with unblocked, non-conflicting work on the critical path; leave a slot idle rather than dispatch into a conflict. Each idle slot needs a reason (a dependency, waiting on the user, nothing safe in parallel); otherwise dispatch or ask.
   7. Report.
 - **Report,** plain and in real units:
   1. Progress toward the end-to-end goal: overall percent weighted by remaining effort, then a table of workstreams with percent (merged and written separately when they differ), what remains and wall time left. Lead with time left when items keep uncovering work.
   2. What landed since the last report, with numbers.
   3. Efficiency: where wall time went, the biggest waste, the top lever with its gain and cost, and what you changed because of it.
   4. Simplification: what was cut and what it saves, or the smallest remaining path.
-  5. Agents last, briefly: each one's job relative to the goal; whether each slot is on the critical path, which are idle on purpose, and whether fanout and model choices are right. Change something or say why not.
+  5. Agents last, briefly: each one's job relative to the goal; slot use (busy against available slot-minutes since the last report), whether each slot is on the critical path, which are idle and why, and whether fanout and model choices are right. Change something or say why not.
 
 ## Dispatching
 
@@ -45,7 +46,7 @@ When planning a phase, read [failure-patterns.md](references/failure-patterns.md
 ## Handling a handoff
 
 1. Verify the head on origin; never trust a claimed commit.
-2. Read [failure-patterns.md](references/failure-patterns.md) and check the handoff against it and against the profile's additional checks. At minimum: the design checks the brief required are present, with no unresolved "no" row and no old form kept beside its general form; the change is systematic (more than ~3 sites or several layers for one feature is a structure finding that gets a design item); nothing passes because of a stub, mock or shortcut; every new input has something that provides it; nothing the profile tracks grew or weakened unplanned; "done" with a dependency only named is partial; a fix to a cost or size metric gets the structural-cause question in failure-patterns.md.
+2. Read [failure-patterns.md](references/failure-patterns.md) and check the handoff against it and against the profile's additional checks. Its "Handoff checks" section lists the minimum.
 3. Route each remaining obligation to an owning item; message running agents it affects. Never message a finished agent.
 4. Decide the next chunk: continue, split, re-plan or park. Park work that doesn't converge after two chunks and is off the critical path, recording its gains and lessons.
 5. Log a decision entry and a ledger row.

@@ -2,6 +2,10 @@
 
 Read at each handoff and when planning a phase. Each line is a mistake that happened in a past effort, followed by the response. Patterns already enforced by a rule in `SKILL.md`, [briefs.md](briefs.md), [integration.md](integration.md) or [reviews.md](reviews.md) are not repeated here.
 
+## Handoff checks
+
+Check at every handoff, at minimum: the design checks the brief required are present, with no unresolved "no" row and no old form kept beside its general form; the change is systematic (more than ~3 sites or several layers for one feature is a structure finding that gets a design item); nothing passes because of a stub, mock or shortcut; every new input has something that provides it; nothing the profile tracks grew or weakened unplanned; "done" with a dependency only named is partial; a fix to a cost or size metric gets the structural-cause question under Metrics and targets below.
+
 ## Design and structure
 
 - **A feature added by patching every layer that assumed the old single case** (one new case at many dispatch sites, duplicated logic under a new key, the same assumption restated in several layers), so every track hit a fresh design stop and nothing ran end to end. → Count sites and layers per feature at each handoff; past about three, stop patching and dispatch a short design item naming the missing abstraction, its interface and the migration. Brief agents to report such triggers instead of patching.
