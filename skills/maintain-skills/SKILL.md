@@ -1,6 +1,6 @@
 ---
 name: maintain-skills
-description: Add, edit, split or clean up an agent skill, or record a lesson about how to do a kind of task. Decides where a lesson belongs (a script, project docs, per-project state, the skill, or a reference file), keeps skills short and free of private details, and checks them with a lint. Use when creating or changing any skill, when a skill has grown long, or when the user says to remember a lesson that should apply beyond one project.
+description: Add, edit, split or clean up an agent skill, or record a lesson about how to do a kind of task. Decides where a lesson belongs (a script, project docs, per-context or per-machine state, the skill, or a reference file), keeps skills short and free of private details, and checks them with a lint. Use when creating or changing any skill, when a skill has grown long, or when the user says to remember a lesson that should apply beyond one project.
 ---
 
 # Maintain skills
