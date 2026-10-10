@@ -1,0 +1,25 @@
+# Writing a brief
+
+Every brief is self-contained; the agent has none of your context. Include:
+
+- **Goal and why:** one or two sentences tying the item to the overarching goal.
+- **Setup:** worktree path; a new branch from an explicit base commit, plus branches to merge first; a build cache copied for this agent, never shared with a running one; a log directory inside its worktree.
+- **Read-first list:** project instructions, the plan item, prior handoffs and findings, audit findings aimed at this item, and the profile's design guide for any item that adds a feature or changes a spec or interface.
+- **Design checks for a new instance** (a model, store, optimization, backend or device), written in the first commit's finding as the profile's design guide defines them:
+  - a mechanism-reuse table: which existing mechanism does the same job; reuse, generalize, or new with a reason;
+  - an instance-fact table: facts in code, specs and contracts true only of today's instances, including today's backend or hardware, each with its general form;
+  - a per-pair count: code naming two features at once; target zero, plus one test with every existing feature on.
+- **Alternatives considered** for any item that designs or changes an interface or spec: at least three designs that differ in abstraction level or mechanism, scored on one rubric (guarantees identical or disqualified; where facts are established and how cost grows per new feature or instance; trusted surface; expressiveness; migration cost), and why the choice wins. A mechanism already in the design docs is one candidate, not a reason. Prototyping is the agent's call.
+- **Design docs with the decision:** a design decision merges with its design-doc update, written as the current design with unbuilt parts in a status table, never deferred to the end of a migration. Search existing design notes for an approved one before briefing a design question.
+- **Definition visibility** for items that add or change specs: decide which definitions callers may see the body of (interfaces open, small, stable; representations hidden behind a few exported facts; anything that grows with each feature hidden by default), with a consumer count per definition. A per-function fix for a size or cost budget whose cause is a shared definition's visibility is a structure finding.
+- **Scope in priority order,** plus an out-of-scope list naming who owns each excluded piece. Excluded dependencies stay named, not assumed away.
+- **File ownership** when agents run in parallel: files it owns, files others own, and what it may touch there (usually only mechanical updates, listed in the handoff).
+- **Guardrails:** the profile's rules on what must not grow or weaken; no stub, mock or shortcut that makes a check pass without the real behavior; if it would have to weaken a result, stop and report.
+- **Reachability:** every new input or dependency needs something that provides it: a caller, a config, a test that exercises it end to end.
+- **Check cadence:** fast targeted checks while editing and per commit, scoped to consumer modules; the full check once at chunk end; the full CI set only at batch merges. Every check scoped to the project's own packages. Long checks run in the foreground with the maximum tool timeout; backgrounded checks never wake the agent. Size parallelism to current host load; cap parallel jobs and clean up worktrees, build state, processes and containers the agent created.
+- **Commits:** small, each passing, pushed immediately; no stash; the attribution trailer on every commit including merges.
+- **Scope and time box:** one plan step or fix cluster per agent, about 1 to 1.5 hours of planned work, with the hand-off point named; the time box (45 to 90 minutes, first passing commit within ~30) is only a backstop. Say: "use the full box while scope remains and you are progressing", "a larger next step is not a reason to hand off: commit what passes and continue", and "stop and hand off at the box". For multi-hour items, require a committed sub-step plan (steps of at most ~30 minutes, each verifying) within 15 minutes, then execution step by step.
+- **Integration first:** from the second chunk of a track on, require the end-to-end skeleton before more supporting pieces, with every gap named at an interface (an error path, a constructor parameter, a caller's responsibility).
+- **Handoff contents:** what is done; remaining work with exact statements and sources; the delta on whatever the profile tracks; tests; cost numbers; what the next items need; wall clock from `date`.
+- **Naming rules** from the profile.
+- **Facts in the brief:** grep the definition before asserting a fact; check an assumption against the concrete case before calling it narrow.
