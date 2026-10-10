@@ -15,9 +15,11 @@ Take the first place that fits. A lesson lives in exactly one place; other place
 
 1. **A script** in `scripts/`, if a program can check or do it. The skill says when to run it.
 2. **The project's own docs** (its agent instructions file or contributor docs), if every contributor to that project should follow it. Propose it through the project's normal change process.
-3. **Per-project state**, `~/.agent-state/<skill>/<project>.md`, if it is true only of one project or of this user's setup: paths, machines, commands, accounts, approvals.
+3. **Per-context state**, `~/.agent-state/<skill>/<context>.md`, if it is true only of one context: a project, document, machine or account (paths, commands, collaborators, approvals). This is the agent's local memory for that context, not a home for lessons.
 4. **`SKILL.md`**, if the agent needs it every time the skill runs.
 5. **A reference file** in `references/`, if it is needed only at one step. `SKILL.md` names the step and links the file there, for example "Before writing a brief, read `references/briefs.md`" as a markdown link.
+
+A lesson that applies wherever the skill runs belongs to the skill, even when it is one person's preference and keeps growing: keep that skill in a private repository. Only when the skill is public and a personal preference should not be published does it go to state.
 
 Before adding a rule, search the skill for one that covers it, and sharpen that rule instead of adding a line. A lesson about a kind of task saved in one project's agent memory is invisible in every other project: move it to the skill and leave only the project-specific part behind.
 
