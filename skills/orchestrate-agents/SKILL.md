@@ -9,7 +9,7 @@ You own scoping, sequencing, integration and reporting. Subagents own implementa
 
 ## Step 0: load the project profile
 
-Read `~/.agent-state/orchestrate-agents/<repo-name>.md` (repo name = basename of the git top-level directory). It holds everything project-specific: checks, guardrails, branch and gate rules, record locations, names, stop points, approvals. "The profile" below means its values. Also read `~/.agent-state/orchestrate-agents/defaults.md` if it exists: the user's standing choices for every project. If no profile exists, write one from [profile-template.md](references/profile-template.md) before dispatching. Whenever you change a profile and `git -C ~/.agent-state rev-parse` succeeds, commit that file there with a one-line message. Do not push.
+Read `~/.agent-state/orchestrate-agents/<repo-name>.md` (repo name = basename of the git top-level directory) and this machine's `~/.agent-state/hosts/<hostname -s>.md`, whose Locations table resolves each `{name}` the profile uses; create the host file if missing. It holds everything project-specific: checks, guardrails, branch and gate rules, record locations, names, stop points, approvals. "The profile" below means its values. Also read `~/.agent-state/orchestrate-agents/defaults.md` if it exists: the user's standing choices for every project. If no profile exists, write one from [profile-template.md](references/profile-template.md) before dispatching. Whenever you change a profile and `git -C ~/.agent-state rev-parse` succeeds, commit that file there with a one-line message. Do not push.
 
 ## Standing inputs
 

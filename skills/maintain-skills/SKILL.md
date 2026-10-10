@@ -15,7 +15,9 @@ Take the first place that fits. A lesson lives in exactly one place; other place
 
 1. **A script** in `scripts/`, if a program can check or do it. The skill says when to run it.
 2. **The project's own docs** (its agent instructions file or contributor docs), if every contributor to that project should follow it. Propose it through the project's normal change process.
-3. **Per-context state**, `~/.agent-state/<skill>/<context>.md`, if it is true only of one context: a project, document, machine or account (paths, commands, collaborators, approvals). This is the agent's local memory for that context, not a home for lessons.
+3. **State**, the agent's local memory for one context, not a home for lessons. State syncs across machines, so split it by what it describes:
+   - `~/.agent-state/<skill>/<context>.md` if it is true of one project, document or account on every machine (commands, collaborators, approvals). No absolute paths: identify repos by remote and paths relative to the repo root, and name machine-specific places as `{name}`.
+   - `~/.agent-state/hosts/<hostname>.md` if it is true of one machine (where things are checked out, tools, disks, cluster access). Its Locations table defines each `{name}`. Each machine writes only its own host file.
 4. **`SKILL.md`**, if the agent needs it every time the skill runs.
 5. **A reference file** in `references/`, if it is needed only at one step. `SKILL.md` names the step and links the file there, for example "Before writing a brief, read `references/briefs.md`" as a markdown link.
 
@@ -62,6 +64,6 @@ The lint limits `SKILL.md` to 100 lines and 1,200 words, and each reference file
 
 ## Check
 
-Run `python3 scripts/lint_skills.py <skills folder>` from this skill's folder after any change. It checks size, frontmatter, the layout above and that every link resolves. For a public repository add `--public --denylist ~/.agent-state/maintain-skills/denylist.txt`; it also refuses absolute paths and the private names listed there. When a new private name appears (a project, host or person), add it to the denylist.
+Run `python3 scripts/lint_skills.py <skills folder>` from this skill's folder after any change. It checks size, frontmatter, the layout above and that every link resolves. For a public repository add `--public --denylist ~/.agent-state/maintain-skills/denylist.txt`; it also refuses absolute paths and the private names listed there. When a new private name appears (a project, host or person), add it to the denylist. For state, run `python3 scripts/lint_state.py ~/.agent-state`: it refuses absolute paths in shared files and `{name}` places the host file does not define.
 
 New skills start in a private repository. Move one to a public repository only after the public lint passes and the user has reviewed it.
