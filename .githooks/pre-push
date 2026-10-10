@@ -2,5 +2,5 @@
 # Refuses a push if any skill is too long or names private details.
 # The denylist is private, so a machine without it cannot push here.
 root=$(git rev-parse --show-toplevel)
-exec python3 "$root/skills/maintain-skills/lint_skills.py" "$root/skills" \
+exec python3 "$root/skills/maintain-skills/scripts/lint_skills.py" "$root/skills" \
     --public --denylist "$HOME/.agent-state/maintain-skills/denylist.txt"

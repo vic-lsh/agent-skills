@@ -8,7 +8,10 @@ SKILLS_DIR holds one folder per skill. For each skill it checks:
   `description`;
 - SKILL.md is at most MAX_MAIN_LINES lines and MAX_MAIN_WORDS words;
 - each other .md file is at most MAX_REF_WORDS words;
-- every file SKILL.md links to with a relative markdown link exists;
+- layout: only SKILL.md, a license file and the folders references/,
+  scripts/ and assets/ at the top level; references/ holds .md files;
+- every relative markdown link in any .md file resolves, and SKILL.md links
+  every file in references/;
 - with --public: no file contains an absolute home or mount path or a
   denylisted term, and the denylist must exist.
 
@@ -24,6 +27,8 @@ from pathlib import Path
 MAX_MAIN_LINES = 100
 MAX_MAIN_WORDS = 1200
 MAX_REF_WORDS = 2000
+ALLOWED_DIRS = {"references", "scripts", "assets"}
+LICENSE = re.compile(r"LICEN[CS]E(\.\w+)?$", re.I)
 PRIVATE_PATH = re.compile(r"(/home/[\w.-]+|/Users/[\w.-]+|/mnt/[\w.-]+)")
 LOCAL_LINK = re.compile(r"\]\(([\w./-]+)\)")
 
@@ -71,9 +76,28 @@ def check_skill(skill, public, denylist):
             f"{main}: {lines} lines, {words} words (limit {MAX_MAIN_LINES} lines, "
             f"{MAX_MAIN_WORDS} words); cut, then move step-specific material to reference files"
         )
-    for m in LOCAL_LINK.finditer(text):
-        if not (skill / m.group(1)).exists():
-            errors.append(f"{main}: links to {m.group(1)}, which does not exist")
+    for entry in sorted(skill.iterdir()):
+        if entry.name.startswith(".") or entry.name == "SKILL.md" or LICENSE.match(entry.name):
+            continue
+        if entry.is_dir() and entry.name in ALLOWED_DIRS:
+            continue
+        if entry.is_dir():
+            hint = "rename it to references/, scripts/ or assets/"
+        else:
+            hint = "move it into " + ("references/" if entry.suffix == ".md" else "scripts/ or assets/")
+        errors.append(f"{entry}: not allowed next to SKILL.md; {hint}")
+    refs = skill / "references"
+    if refs.is_dir():
+        linked = {(skill / m.group(1)).resolve() for m in LOCAL_LINK.finditer(text)}
+        for ref in sorted(refs.rglob("*")):
+            if ref.is_file() and ref.suffix != ".md":
+                errors.append(f"{ref}: references/ holds .md docs; move it to scripts/ or assets/")
+            elif ref.is_file() and ref.resolve() not in linked:
+                errors.append(f"{ref}: not linked from SKILL.md, so it is never read")
+    for doc in sorted(skill.rglob("*.md")):
+        for m in LOCAL_LINK.finditer(doc.read_text()):
+            if not (doc.parent / m.group(1)).exists():
+                errors.append(f"{doc}: links to {m.group(1)}, which does not exist")
     for path in sorted(skill.rglob("*")):
         if not path.is_file() or path.name.startswith("."):
             continue

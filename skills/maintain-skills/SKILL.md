@@ -13,13 +13,27 @@ If `~/.agent-state/maintain-skills/setup.md` exists, read it first: it says wher
 
 Take the first place that fits. A lesson lives in exactly one place; other places link to it.
 
-1. **A script**, if a program can check or do it. The skill says when to run the script.
+1. **A script** in `scripts/`, if a program can check or do it. The skill says when to run it.
 2. **The project's own docs** (its agent instructions file or contributor docs), if every contributor to that project should follow it. Propose it through the project's normal change process.
 3. **Per-project state**, `~/.agent-state/<skill>/<project>.md`, if it is true only of one project or of this user's setup: paths, machines, commands, accounts, approvals.
 4. **`SKILL.md`**, if the agent needs it every time the skill runs.
-5. **A reference file** next to `SKILL.md`, if it is needed only at one step. `SKILL.md` names the step and links the file: for example, "Before writing a brief, read `briefs.md`," as a markdown link.
+5. **A reference file** in `references/`, if it is needed only at one step. `SKILL.md` names the step and links the file there, for example "Before writing a brief, read `references/briefs.md`" as a markdown link.
 
 Before adding a rule, search the skill for one that covers it, and sharpen that rule instead of adding a line. A lesson about a kind of task saved in one project's agent memory is invisible in every other project: move it to the skill and leave only the project-specific part behind.
+
+## Layout
+
+Follow the Agent Skills convention (agentskills.io):
+
+```
+<skill-name>/
+  SKILL.md       required; the only file always read when the skill runs
+  references/    docs the agent reads at a named step (*.md)
+  scripts/       code the agent runs rather than reads
+  assets/        files used in the output: templates, images, fonts
+```
+
+Nothing else sits next to `SKILL.md` except a license file. Link every reference file directly from `SKILL.md`, at the step that needs it: an unlinked file is never read, and one reached only through another reference tends to be read partially. Reference files may also link each other by relative path.
 
 ## Writing
 
@@ -46,6 +60,6 @@ The lint limits `SKILL.md` to 100 lines and 1,200 words, and each reference file
 
 ## Check
 
-Run `python3 lint_skills.py <skills folder>` from this skill's folder after any change. For a public repository add `--public --denylist ~/.agent-state/maintain-skills/denylist.txt`; it also refuses absolute paths and the private names listed there. When a new private name appears (a project, host or person), add it to the denylist.
+Run `python3 scripts/lint_skills.py <skills folder>` from this skill's folder after any change. It checks size, frontmatter, the layout above and that every link resolves. For a public repository add `--public --denylist ~/.agent-state/maintain-skills/denylist.txt`; it also refuses absolute paths and the private names listed there. When a new private name appears (a project, host or person), add it to the denylist.
 
 New skills start in a private repository. Move one to a public repository only after the public lint passes and the user has reviewed it.

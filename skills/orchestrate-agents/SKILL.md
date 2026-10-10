@@ -9,7 +9,7 @@ You own scoping, sequencing, integration and reporting. Subagents own implementa
 
 ## Step 0: load the project profile
 
-Read `~/.agent-state/orchestrate-agents/<repo-name>.md` (repo name = basename of the git top-level directory). It holds everything project-specific: checks, guardrails, branch and gate rules, record locations, names, stop points, approvals. "The profile" below means its values. Also read `~/.agent-state/orchestrate-agents/defaults.md` if it exists: the user's standing choices for every project. If no profile exists, write one from [profile-template.md](profile-template.md) before dispatching. Whenever you change a profile and `git -C ~/.agent-state rev-parse` succeeds, commit that file there with a one-line message. Do not push.
+Read `~/.agent-state/orchestrate-agents/<repo-name>.md` (repo name = basename of the git top-level directory). It holds everything project-specific: checks, guardrails, branch and gate rules, record locations, names, stop points, approvals. "The profile" below means its values. Also read `~/.agent-state/orchestrate-agents/defaults.md` if it exists: the user's standing choices for every project. If no profile exists, write one from [profile-template.md](references/profile-template.md) before dispatching. Whenever you change a profile and `git -C ~/.agent-state rev-parse` succeeds, commit that file there with a one-line message. Do not push.
 
 ## Standing inputs
 
@@ -40,12 +40,12 @@ Each overrides the defaults below.
 
 ## Dispatching
 
-When planning a phase, read [failure-patterns.md](failure-patterns.md). Before dispatching parallel items, read [integration.md](integration.md). Before writing a brief, read [briefs.md](briefs.md). Split work by file ownership, not plan numbering; feed the critical path first and recompute it as items land. Start downstream items early when their write sets are disjoint. When parallel items overlap on a module, sequence them on one integration branch, foundation first. It also covers batching, merges and live or hardware runs.
+When planning a phase, read [failure-patterns.md](references/failure-patterns.md). Before dispatching parallel items, read [integration.md](references/integration.md). Before writing a brief, read [briefs.md](references/briefs.md). Split work by file ownership, not plan numbering; feed the critical path first and recompute it as items land. Start downstream items early when their write sets are disjoint. When parallel items overlap on a module, sequence them on one integration branch, foundation first. It also covers batching, merges and live or hardware runs.
 
 ## Handling a handoff
 
 1. Verify the head on origin; never trust a claimed commit.
-2. Read [failure-patterns.md](failure-patterns.md) and check the handoff against it and against the profile's additional checks. At minimum: the design checks the brief required are present, with no unresolved "no" row and no old form kept beside its general form; the change is systematic (more than ~3 sites or several layers for one feature is a structure finding that gets a design item); nothing passes because of a stub, mock or shortcut; every new input has something that provides it; nothing the profile tracks grew or weakened unplanned; "done" with a dependency only named is partial; a fix to a cost or size metric gets the structural-cause question in failure-patterns.md.
+2. Read [failure-patterns.md](references/failure-patterns.md) and check the handoff against it and against the profile's additional checks. At minimum: the design checks the brief required are present, with no unresolved "no" row and no old form kept beside its general form; the change is systematic (more than ~3 sites or several layers for one feature is a structure finding that gets a design item); nothing passes because of a stub, mock or shortcut; every new input has something that provides it; nothing the profile tracks grew or weakened unplanned; "done" with a dependency only named is partial; a fix to a cost or size metric gets the structural-cause question in failure-patterns.md.
 3. Route each remaining obligation to an owning item; message running agents it affects. Never message a finished agent.
 4. Decide the next chunk: continue, split, re-plan or park. Park work that doesn't converge after two chunks and is off the critical path, recording its gains and lessons.
 5. Log a decision entry and a ledger row.
@@ -53,7 +53,7 @@ When planning a phase, read [failure-patterns.md](failure-patterns.md). Before d
 
 ## Records and reviews
 
-Keep a numbered decision log (decision, why, alternatives, follow-ups) and an effort ledger (one row per item: model, estimate, wall clock, check time, tokens, outcome). Run a read-only review every ~2 hours of agent work or every 3 to 4 landed PRs; read [reviews.md](reviews.md) for what it checks, design alignment, and forecasting. Private operational detail stays out of the project repo and out of briefs that commit.
+Keep a numbered decision log (decision, why, alternatives, follow-ups) and an effort ledger (one row per item: model, estimate, wall clock, check time, tokens, outcome). Run a read-only review every ~2 hours of agent work or every 3 to 4 landed PRs; read [reviews.md](references/reviews.md) for what it checks, design alignment, and forecasting. Private operational detail stays out of the project repo and out of briefs that commit.
 
 ## Recovering from a restart
 
