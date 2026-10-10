@@ -38,7 +38,7 @@ def main():
         errors.append(f"{host_file}: missing; create it with a Locations table for this machine")
     for path in sorted(args.state_dir.rglob("*.md")):
         rel = path.relative_to(args.state_dir)
-        if rel.parts[0] == "hosts":
+        if rel.parts[0] == "hosts" or rel == Path("README.md"):
             continue
         for n, line in enumerate(path.read_text().splitlines(), 1):
             for m in ABSOLUTE.finditer(line):

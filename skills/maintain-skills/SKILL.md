@@ -18,6 +18,8 @@ Take the first place that fits. A lesson lives in exactly one place; other place
 3. **State**, the agent's local memory for one context, not a home for lessons. State syncs across machines, so split it by what it describes:
    - `~/.agent-state/<skill>/<context>.md` if it is true of one project, document or account on every machine (commands, collaborators, approvals). No absolute paths: identify repos by remote and paths relative to the repo root, and name machine-specific places as `{name}`.
    - `~/.agent-state/hosts/<hostname>.md` if it is true of one machine (where things are checked out, tools, disks, cluster access). Its Locations table defines each `{name}`. Each machine writes only its own host file.
+
+   A skill that writes state tells the agent to save it as `~/.agent-state/README.md` says (commit, pull, push, resolve conflicts at once), and does not restate those steps.
 4. **`SKILL.md`**, if the agent needs it every time the skill runs.
 5. **A reference file** in `references/`, if it is needed only at one step. `SKILL.md` names the step and links the file there, for example "Before writing a brief, read `references/briefs.md`" as a markdown link.
 
