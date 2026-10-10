@@ -41,7 +41,7 @@ Nothing else sits next to `SKILL.md` except a license file. Link every reference
 
 ## Writing
 
-- **Frontmatter:** `name` equals the folder name and names the task (`maintain-skills`, `open-pr`). `description` says what the skill covers and when to use it; it is the only part always loaded, so it decides when the skill triggers.
+- **Frontmatter:** `name` equals the folder name and names the task (`maintain-skills`, `open-pr`). `description` says what the skill covers and when to use it; it is the only part always loaded, so it decides when the skill triggers. Keep it general, even in a private skill: no project, paper, host or person names, and no "such as <our project>" examples. Those belong in state.
 - **Rules, not stories.** Write each rule as one line saying what to do. The incident behind it goes in a reference file only if the reasoning is needed to apply the rule well.
 - **Procedures as numbered steps.**
 - **Link, don't restate:** project docs, other skills, reference files.
@@ -64,6 +64,6 @@ The lint limits `SKILL.md` to 100 lines and 1,200 words, and each reference file
 
 ## Check
 
-Run `python3 scripts/lint_skills.py <skills folder>` from this skill's folder after any change. It checks size, frontmatter, the layout above and that every link resolves. For a public repository add `--public --denylist ~/.agent-state/maintain-skills/denylist.txt`; it also refuses absolute paths and the private names listed there. When a new private name appears (a project, host or person), add it to the denylist. For state, run `python3 scripts/lint_state.py ~/.agent-state`: it refuses absolute paths in shared files and `{name}` places the host file does not define.
+Run `python3 scripts/lint_skills.py <skills folder>` from this skill's folder after any change. It checks size, frontmatter, the layout above and that every link resolves. Pass `--denylist ~/.agent-state/maintain-skills/denylist.txt` to also refuse the names listed there in any description; add `--public` for a public repository to refuse them, and absolute paths, everywhere. When a new private name appears (a project, host or person), add it to the denylist. For state, run `python3 scripts/lint_state.py ~/.agent-state`: it refuses absolute paths in shared files and `{name}` places the host file does not define.
 
 New skills start in a private repository. Move one to a public repository only after the public lint passes and the user has reviewed it.

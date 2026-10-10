@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check agent skills for size, structure and private details.
 
-Usage: lint_skills.py SKILLS_DIR [--public --denylist FILE]
+Usage: lint_skills.py SKILLS_DIR [--denylist FILE] [--public]
 
 SKILLS_DIR holds one folder per skill. For each skill it checks:
 - SKILL.md exists, has frontmatter with `name` equal to the folder name and a
@@ -12,6 +12,7 @@ SKILLS_DIR holds one folder per skill. For each skill it checks:
   scripts/ and assets/ at the top level; references/ holds .md files;
 - every relative markdown link in any .md file resolves, and SKILL.md links
   every file in references/;
+- with --denylist: no frontmatter description names a denylisted term;
 - with --public: no file contains an absolute home or mount path or a
   denylisted term, and the denylist must exist.
 
@@ -70,6 +71,9 @@ def check_skill(skill, public, denylist):
             errors.append(f"{main}: frontmatter name {fields.get('name')!r} != folder {skill.name!r}")
         if not fields.get("description"):
             errors.append(f"{main}: missing description")
+        for term in denylist:
+            if term.lower() in fields.get("description", "").lower():
+                errors.append(f"{main}: description names {term!r}; keep descriptions general")
     lines, words = len(text.splitlines()), len(text.split())
     if lines > MAX_MAIN_LINES or words > MAX_MAIN_WORDS:
         errors.append(
@@ -126,11 +130,11 @@ def main():
     parser.add_argument("--public", action="store_true", help="also check for private details")
     args = parser.parse_args()
     denylist = []
-    if args.public:
-        if not (args.denylist and args.denylist.is_file()):
-            print(f"--public needs a denylist file; {args.denylist} not found", file=sys.stderr)
-            return 1
+    if args.denylist and args.denylist.is_file():
         denylist = load_denylist(args.denylist)
+    elif args.public or args.denylist:
+        print(f"denylist {args.denylist} not found", file=sys.stderr)
+        return 1
     errors = []
     for skill in sorted(p for p in args.skills_dir.iterdir() if p.is_dir() and not p.name.startswith(".")):
         errors += check_skill(skill, args.public, denylist)
