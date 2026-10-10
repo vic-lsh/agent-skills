@@ -21,8 +21,8 @@ Each overrides the defaults below.
 
 ## The loop
 
-- **Start it on invocation** if none runs: invoke the `loop` skill with no interval and a prompt that re-enters this skill (`/orchestrate-agents tick: <goal>. Assess each agent against expected progress, steer, reflect on efficiency, report.`). Cadence from user or profile, default 30 minutes. Reuse a `/loop` the user started.
-- **Self-paced:** `ScheduleWakeup` with the prompt verbatim; re-arm every tick, after every task notification, and after a restart. Stop the loop at a stop point or when done, and say so.
+- **Start it on invocation** if none runs: a fixed-interval check-in with `CronCreate` (cadence from user or profile, default every 30 minutes, off the :00/:30 marks) whose prompt re-enters this skill (`/orchestrate-agents tick: <goal>. Assess each agent against expected progress, steer, reflect on efficiency, report.`). Reuse a `/loop` the user started.
+- **Fixed cadence, not self-paced:** a `ScheduleWakeup` re-armed after every task notification keeps sliding and never fires while agents are busy, so check-ins stop. Agent notifications are handled as they arrive; the cron tick still posts the full report on time. Delete the cron job at a stop point or when done, and say so.
 - **Each tick:**
   1. Inspect cheaply: `git fetch`, each branch's recent log, `git status` in each worktree, log mtimes and processes. Never read a running agent's transcript. Stop orphaned processes and containers left by finished agents.
   2. Compare each agent with its expected first commit and handoff time. Behind without activity: one steering message, specific and short; still silent ~10 minutes later: stop it and restart on the same model. Behind because scope grew: re-scope or split.
