@@ -22,6 +22,8 @@ Check at every handoff, at minimum: the design checks the brief required are pre
 - **A test expected to fail passed for the wrong reason** (a timeout, a build error). → The test runner requires the intended failure kind.
 - **A parallelism cap set while the host was busy stayed in briefs after it went idle,** making a full check several times slower. → Size parallelism in each brief to current load; when one agent runs alone, tell it to raise parallelism.
 
+- **The top of a PR stack conflicted after its parents were squash-merged by the queue,** so it was ejected even though the stack was enqueued as one unit. → After any parent of a stack lands, sync the remaining PRs with main before (re-)enqueueing them, and check the queue each tick.
+
 ## Steering
 
 - **The plan kept its original shape after results changed what was needed,** and the user had to ask for simplification. → When asked how to finish, propose the smallest path first.
