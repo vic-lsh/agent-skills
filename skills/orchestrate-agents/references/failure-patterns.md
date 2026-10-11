@@ -24,6 +24,8 @@ Check at every handoff, at minimum: the design checks the brief required are pre
 
 - **The top of a PR stack conflicted after its parents were squash-merged by the queue,** so it was ejected even though the stack was enqueued as one unit. → After any parent of a stack lands, sync the remaining PRs with main before (re-)enqueueing them, and check the queue each tick.
 
+- **Coupled PRs moving the same hot files (generated code, package manifests) were landed as separate queue entries while main kept changing,** so each was ejected and re-synced several times. → Fold coupled changes into one integration PR with separate commits before queueing; do file moves alone and fast; enqueue the moment CI is green.
+
 ## Steering
 
 - **The plan kept its original shape after results changed what was needed,** and the user had to ask for simplification. → When asked how to finish, propose the smallest path first.
