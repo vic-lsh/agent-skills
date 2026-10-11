@@ -27,7 +27,7 @@ Each comes from the user, defaults or the profile.
 - **Each tick:**
   1. Inspect cheaply: `git fetch`, each branch's recent log, `git status` in each worktree, log mtimes and processes. Never read a running agent's transcript. Stop orphaned processes and containers left by finished agents.
   2. At dispatch, log each agent's estimated first-commit and handoff times in the ledger. Each tick, diff actual against estimate, track your estimate bias over the effort, and rescale remaining estimates by it. Behind without activity: one steering message, specific and short; still silent ~10 minutes later: stop it and restart on the same model. Behind because scope grew: re-scope or split.
-  3. Handle finished work (below).
+  3. Handle finished work (below). Check every PR you enqueued: merged, queued or ejected; diagnose an ejection (merge-only conflict or flaky test) and fix or re-enqueue it that tick.
   4. Simplify: stop or defer gates, items, batches and checks that no longer change the outcome, plans built on a false assumption, and deferrable scope; merge batches that can be one. Log each cut with the wall time it saves.
   5. Find multipliers: a per-step cost that repeats across remaining items (CI minutes, merge churn, check time, review rounds). Any check over 10 minutes is a defect to fix, not a timeout to raise. If fixing it saves more wall time than it costs, dispatch it now, ahead of feature work.
   6. Fill free slots with unblocked, non-conflicting work on the critical path; leave a slot idle rather than dispatch into a conflict. Each idle slot needs a reason (a dependency, waiting on the user, nothing safe in parallel); otherwise dispatch or ask.
