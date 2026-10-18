@@ -15,6 +15,7 @@ The next agent starts with no context. The handoff document is the only thing it
    - **Head:** branch, verified commit, worktree, build cache or volume, base branch and the commit last merged from it.
    - **Done:** each completed step with its commit hash.
    - **Next:** the remaining steps in order. The first step is a concrete action (a file and a symbol, a command), not a topic.
+   - **Pending:** external runs or requests still in flight (id, where results appear) and what to do for each possible outcome.
    - **Decided:** decisions made this chunk and the one-line reason, so the next agent does not reopen them. Link the spec or design note that holds settled decisions.
    - **Open:** questions only the orchestrator or user can answer, each with your recommended answer.
    - **Traps:** commands that need special flags, pre-existing failures to ignore (with proof they reproduce on the base), approaches tried and abandoned with why.
