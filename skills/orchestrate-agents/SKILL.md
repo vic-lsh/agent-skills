@@ -54,7 +54,7 @@ When planning a phase, read [failure-patterns.md](references/failure-patterns.md
 
 ## Records and reviews
 
-Keep a numbered decision log (decision, why, alternatives, follow-ups) and an effort ledger (one row per item: model, estimate, wall clock, check time, tokens, outcome). Run a read-only review every ~2 hours of agent work or every 3 to 4 landed PRs; read [reviews.md](references/reviews.md) for what it checks, design alignment, and forecasting. Private operational detail stays out of the project repo and out of briefs that commit.
+Keep a numbered decision log (decision, why, alternatives, follow-ups) and an effort ledger (one row per item: model, estimate, wall clock, check time, tokens, outcome). Run read-only reviews on events (every design note before implementation, each new feature family, a sweep per 3 to 4 merges); read [reviews.md](references/reviews.md) for when, what each checks, design alignment, and forecasting. Private operational detail stays out of the project repo and out of briefs that commit.
 
 ## Recovering from a restart
 
