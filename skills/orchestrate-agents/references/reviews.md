@@ -1,8 +1,18 @@
 # Reviews, design alignment and forecasts
 
-## Periodic review
+## When to review
 
-One read-only review agent every ~2 hours of agent work or every 3 to 4 landed PRs, covering everything changed since the last review across all PRs, not one review per PR. It checks:
+Trigger reviews by events, not by the clock:
+
+- **Before implementation:** an adversarial read-only review of every design note or spec, with fixes integrated before the first implementation chunk. This is where most review value comes from.
+- **Before a new feature family:** an architecture pass on the single-instance assumptions that family will hit, each priced now versus later.
+- **Sweep:** every 3 to 4 merges into the integration branch, covering everything changed since the last sweep across all PRs. It reports only findings that would change a decision; the rest go in an appendix.
+
+Route review findings into the next brief of the owning item, never into a running chunk.
+
+## Sweep checklist
+
+The sweep checks:
 
 - the previous review's findings landed, structure findings above all;
 - guards that trust caller-supplied fields instead of established facts; success reported without verifying the effect;
