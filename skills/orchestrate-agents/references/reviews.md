@@ -7,6 +7,9 @@ Trigger reviews by events, not by the clock:
 - **Before implementation:** an adversarial read-only review of every design note or spec, with fixes integrated before the first implementation chunk. This is where most review value comes from.
 - **Before a new feature family:** an architecture pass on the single-instance assumptions that family will hit, each priced now versus later.
 - **Sweep:** every 3 to 4 merges into the integration branch, covering everything changed since the last sweep across all PRs. It reports only findings that would change a decision; the rest go in an appendix.
+- **Vision review:** at every merge batch, compare the whole current design and code to the project's vision document, not to recent changes. Each gap gets one verdict: planned (item and phase), accepted limit (recorded load-bearing reason) or problem (no planned change), which becomes a design item at once. Reviews scoped to one diff or note miss structural gaps that no single change introduced.
+
+Every review, of any kind, also flags the anti-patterns of the codebase's verification tool (closed sets matched across modules where plugins add cases, re-proving one argument per instance, large invariants revealed whole, cross-module unfolding, spec and exec mirrors, trusted surface without a named consumer, proof splits forced near the solver ceiling); the profile names the project's checklist. A pattern seen in two items is a design item, not a cleanup.
 
 Route review findings into the next brief of the owning item, never into a running chunk.
 
