@@ -4,6 +4,7 @@ A profile answers, briefly. Ask the user for what you cannot derive from the pro
 
 - **Checks:** the fast, full and CI check commands; which run per commit, per chunk, per batch; time limits and how to split slow suites.
 - **Guardrails:** what must not grow (unchecked code, dependencies, API surface) and what counts as a weakened result; what must never change without the user.
+- **Design effort:** whether the effort designs or migrates software, so [design-efforts.md](design-efforts.md) applies.
 - **Design guide:** the document or skill agents read before adding a feature or changing an interface.
 - **Additional handoff and review checks** specific to the project's kind of work.
 - **Branches:** integration branch, merge style, what needs the user's go.
