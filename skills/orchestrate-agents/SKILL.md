@@ -58,4 +58,4 @@ Keep a numbered decision log (decision, why, alternatives, follow-ups) and an ef
 
 ## Recovering from a restart
 
-Stopped agents cannot be resumed. Inspect each branch and worktree (pushed commits, uncommitted edits, stray files), start a continuation agent on the same model whose brief states exactly what is pushed and that in-flight external runs are gone, and re-arm the loop.
+Stopped agents cannot be resumed. Inspect each branch and worktree (pushed commits, uncommitted edits, stray files), start a continuation agent on the same model whose brief states exactly what is pushed and which detached jobs it must adopt, and re-arm the loop.
