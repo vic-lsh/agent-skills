@@ -1,9 +1,9 @@
 ---
-name: design-verification-ladder
-description: Design code so it can be shown correct, and verify it by climbing from small, fast techniques (types, assertions, unit and property tests, fuzzing) to large ones (deterministic simulation, model checking, end-to-end, replay, live runs). Use when designing a component or interface, planning how a change will be verified, deciding whether a change is ready for an expensive run, writing a brief that must state its verification, or analyzing a bug that escaped to a costly stage.
+name: design-for-verification
+description: Shape a codebase so its correctness can be checked cheaply and at scale (deterministic core, injected nondeterminism, narrow I/O seams, explicit state, recorded boundaries), and verify it by climbing from small, fast techniques (types, assertions, unit and property tests, fuzzing) to large ones (deterministic simulation, model checking, end-to-end, replay, live runs). Use when designing a component or interface, planning how a change will be verified, deciding whether a change is ready for an expensive run, writing a brief that must state its verification, or analyzing a bug that escaped to a costly stage.
 ---
 
-# Design-verification ladder
+# Design for verification
 
 Correctness comes from design, not from testing afterwards. Code built to be checked can be verified in seconds by machines; code that is not can only be watched in production. Design for verification from the first line.
 
@@ -54,7 +54,7 @@ Check the tests themselves with mutation testing when their strength matters.
    - classification or scoring: regression fixtures plus replay of real data;
    - platform wiring: scripted end-to-end;
    - prompts or model behavior: replay and live runs only, so keep each change small.
-3. **Push escaped bugs down.** Add a regression at the lowest level that reproduces the bug, then fix the gap that let it pass there.
+3. **Push escaped bugs down.** Add a regression at the lowest level that reproduces the bug, then fix the gap that let it pass there. If a program could catch the whole bug class, or the check is reusable verification infrastructure (a fuzz harness, a simulator), build it with skill `codify`.
 4. **Record where bugs are caught.** If large levels keep catching small-level bugs, invest in the small levels.
 5. **Keep each level fast.** Know each level's expected time; when one runs well past it, fix the loop and guard against the slow path returning.
 6. **Use the project's ladder.** If the project documents concrete commands per level, use them; if not, propose one built from this table.
