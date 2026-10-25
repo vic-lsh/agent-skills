@@ -1,4 +1,4 @@
-# Reviews, design alignment and forecasts
+# Reviews and forecasts
 
 ## When to review
 
@@ -26,13 +26,9 @@ The sweep checks:
 - gaps across PRs: contracts or producers named in handoffs that no item owns;
 - the profile's project-specific review items.
 
-Beyond findings, each review proposes changes that make a whole class of error impossible or trivial to test: types that cannot represent the bad state, one shared mechanism instead of per-module copies, constructors that require evidence, generic harnesses every new component gets for free (crash at every boundary, reload every step, shared contract suites for Fakes and production). Each proposal names the error class, the findings it would have prevented, and its cost.
+Design efforts add the class-removal proposals and design alignment in [design-efforts.md](design-efforts.md).
 
 Route each finding to the item that owns the code. Structure findings go to a named consolidation item with its own time box, scheduled before work that would multiply the problem; never mark them low and leave them unowned.
-
-## Design alignment
-
-Periodically, and before a phase adds a new kind of instance, compare each design's promises (interfaces, per-instance cost claims, stated generality) with the implementation. Give each mismatch one verdict: implementation drift (fix the code), a design gap the implementation exposed (revise the design, with review), both wrong (a design item), or a deliberate deferral (owner and removal plan). Reviews of a sub-design check it against its parent design's cost promises and walk one operation of every instance kind, deferred ones included, through the new interface. A periodic design-level review re-asks, for designs in flight, whether another abstraction level would be cheaper.
 
 ## Forecasts
 
