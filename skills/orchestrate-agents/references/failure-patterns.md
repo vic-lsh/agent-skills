@@ -34,6 +34,7 @@ Check at every handoff, at minimum: the design checks the brief required are pre
 ## Metrics and targets
 
 - Chasing a number oscillates on noise: set a fixed target below the limit, measure the maximum over several seeds, and park after two chunks.
+- A merged lever was measured while still off on the serving path (a test-only switch), wasting a hardware run. → Before queuing a performance run, confirm the lever is on in the served configuration and name that switch or path in the run's notes.
 - When a cost or size metric keeps crossing its limit and each handoff fixes it locally, ask whether the cause is structural (does the cost grow with each added feature?); a cause seen twice becomes a design item.
 - Treat any check over 10 minutes (ideally 5) as a defect to localize, group, cache or shard; raising a timeout is only a stopgap.
 - An interface law (a contract a plugin must meet) designed against stand-ins fails review repeatedly: once against a stand-in consumer, then with the real consumer but no producer. A law item's acceptance names both sides: the real consumer statement proved from the law, and one real instance proving the law's premises at the real inputs, built in the same item.
