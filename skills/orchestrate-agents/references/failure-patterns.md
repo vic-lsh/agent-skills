@@ -24,6 +24,6 @@ Check at every handoff, at minimum (design efforts add the checks in [design-eff
 ## Metrics and targets
 
 - Chasing a number oscillates on noise: set a fixed target below the limit, measure the maximum over several seeds, and park after two chunks.
-- A merged lever was measured while still off on the serving path (a test-only switch), wasting a hardware run. → Before queuing a performance run, confirm the lever is on in the served configuration and name that switch or path in the run's notes.
+- A merged lever was measured while still off on the serving path (a test-only switch), or a run launched on a commit from before the feature it was meant to test merged. → Before a run starts, and before claiming what it tests, check that its commit contains each feature's merge (`git merge-base --is-ancestor`) and that the lever is on in the served configuration; name both in the run's notes. A run that has not started its expensive phase moves to the newest commit when a feature it should test lands.
 - When a cost or size metric keeps crossing its limit and each handoff fixes it locally, ask whether the cause is structural (does the cost grow with each added feature?); a cause seen twice becomes a design item.
 - Treat any check over 10 minutes (ideally 5) as a defect to localize, group, cache or shard; raising a timeout is only a stopgap.
