@@ -47,7 +47,7 @@ When planning a phase, read [failure-patterns.md](references/failure-patterns.md
 
 1. Verify the head on origin; never trust a claimed commit.
 2. Read [failure-patterns.md](references/failure-patterns.md) and check the handoff against it and against the profile's additional checks. Its "Handoff checks" section lists the minimum.
-3. Group findings that arrive together by shared cause first: one cause, one item. Route each remaining obligation to an owning item; message running agents it affects. Never message a finished agent.
+3. Group findings by shared cause, each new one also against the failure catalog: one cause, one item. Route each remaining obligation to an owning item; message running agents it affects. Never message a finished agent.
 4. Decide the next chunk: continue, split, re-plan or park. Park work that doesn't converge after two chunks and is off the critical path, recording its gains and lessons.
 5. Log a decision entry and a ledger row.
 6. Never relay a denied action to another agent; surface it to the user.
