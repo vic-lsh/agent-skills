@@ -12,6 +12,8 @@ Check at every handoff, at minimum (design efforts add the checks in [design-eff
 - **A test expected to fail passed for the wrong reason** (a timeout, a build error). → The test runner requires the intended failure kind.
 - **A parallelism cap set while the host was busy stayed in briefs after it went idle,** making a full check several times slower. → Size parallelism in each brief to current load; when one agent runs alone, tell it to raise parallelism.
 
+- **A long-running agent's side PR wrote its READY marker without a completion notification** and stayed unmerged for hours, blocking runs that needed it. → Each tick, list every open PR into the integration branch and reconcile it with the ledger.
+
 - **The top of a PR stack conflicted after its parents were squash-merged by the queue,** so it was ejected even though the stack was enqueued as one unit. → After any parent of a stack lands, sync the remaining PRs with main before (re-)enqueueing them, and check the queue each tick.
 
 - **Coupled PRs moving the same hot files (generated code, package manifests) were landed as separate queue entries while main kept changing,** so each was ejected and re-synced several times. → Fold coupled changes into one integration PR with separate commits before queueing; do file moves alone and fast; enqueue the moment CI is green.
