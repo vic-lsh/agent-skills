@@ -9,6 +9,17 @@ Correctness comes from design, not from testing afterwards. Code built to be che
 
 **Do not take the shortcut.** Skipping injectable seams or a deterministic core feels faster today, but every later bug then costs a slow, flaky, expensive run to find, and retrofitting the seams costs more than building them. The investment pays for itself many times over a project's life.
 
+## Order of preference
+
+Prove each property at the cheapest level that can hold it:
+
+1. **By construction.** Make the bad state impossible through architecture, process boundaries, credentials or types, and guard that structure with a lint or static check. Never write runtime tests for what holds by construction.
+2. **Behavioral properties by simulation.** List what structure cannot guarantee, top-down and short, before writing tests. Check each one with deterministic simulation of the real code, invariants checked at every step, and untrusted inputs (plugins, user or agent-written code, agents) replaced by adversarial stand-ins.
+3. **Honest fakes.** A few conformance tests compare each fake and the simulator with the real system; close every gap a real run exposes (see rule 3).
+4. **Reality last.** Scripted end-to-end and small live runs, only for what nothing cheaper shows.
+
+Test properties, not code: a test that maps to no property is deleted, and a heavy test stays only if it catches a fault no cheaper test catches.
+
 ## Design for verification
 
 Before writing a component, decide how each level below will check it, and build the seams those levels need. Read the technique's reference when applying or reviewing it:
@@ -31,7 +42,7 @@ Climb from small to large; each level sees what the cheaper ones cannot. Details
 
 | Scale | Techniques | Shows |
 |---|---|---|
-| Static | Types that make illegal states unrepresentable, lint, boundary checks | Whole bug classes, before running |
+| Static | Construction: types that make illegal states unrepresentable, boundaries and credentials that forbid them, lints that keep them | Whole bug classes, before running |
 | In code | Assertions, invariants, contracts | Violations at the moment they happen |
 | Unit | Example tests written to fail first; regression fixtures from real bugs | Logic at an interface; known bugs stay fixed |
 | Generated inputs | Property-based and stateful model-based tests; coverage-guided fuzzing; differential testing against a reference | Edge cases nobody thought to write |
@@ -41,7 +52,7 @@ Climb from small to large; each level sees what the cheaper ones cannot. Details
 | Real data | Replay of recorded real runs; shadow traffic | How new logic handles real inputs |
 | Live | Smallest live smoke, then full runs or canaries | Behavior only real conditions show |
 
-Check the tests themselves with mutation testing when their strength matters.
+Check the tests themselves with mutation testing: tests that kill no mutant a cheaper test misses are deleted.
 
 ## Rules
 
@@ -54,7 +65,7 @@ Check the tests themselves with mutation testing when their strength matters.
    - classification or scoring: regression fixtures plus replay of real data;
    - platform wiring: scripted end-to-end;
    - prompts or model behavior: replay and live runs only, so keep each change small.
-3. **Push escaped bugs down.** Add a regression at the lowest level that reproduces the bug, then fix the gap that let it pass there. If a program could catch the whole bug class, or the check is reusable verification infrastructure (a fuzz harness, a simulator), build it with skill `codify`.
+3. **Push escaped bugs down.** Add a regression at the lowest level that reproduces the bug, then fix the gap that let it pass there; if the simulation cannot express the bug, fix the simulation first. If a program could catch the whole bug class, or the check is reusable verification infrastructure (a fuzz harness, a simulator), build it with skill `codify`.
 4. **Record where bugs are caught.** If large levels keep catching small-level bugs, invest in the small levels.
 5. **Keep each level fast.** Know each level's expected time; when one runs well past it, fix the loop and guard against the slow path returning.
 6. **Use the project's ladder.** If the project documents concrete commands per level, use them; if not, propose one built from this table.
