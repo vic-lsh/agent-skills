@@ -13,8 +13,21 @@ When several findings arrive at once (a dogfood round, several red checks, a rev
 
 If the code being patched is about to be replaced, keep the fix to the mechanism and minimal.
 
+## Build order: model before implementation
+
+Any item that adds or changes state, ownership, a host protocol, scheduling, concurrency or a cross-component contract is built in stages, each gated on the previous one passing. The brief names the stages and their artifacts explicitly, whatever question the brief is about (size, speed, a bug); a brief framed around another question is where the order slips.
+
+1. **Statement.** Fix the end-to-end guarantee the item must preserve or discharge. A weakening goes through the project's spec-change procedure.
+2. **Exhaustive protocol model.** A small explicit-state model of the protocol at small bounds, with step orderings left free, and named mutations that each fail their property. Protocol bugs the model finds are fixed in the design here, not in code.
+3. **Abstract proof-space model.** A ghost state machine covering every in-scope feature on every target, with its invariant and proofs that each transition meets the obligations the implementation will cite. No executable code.
+4. **Offline resource check.** Memory, boot work and per-step host cost computed from the plan, against the reference.
+5. **Implementation** that refines stage 3, citing the model's actions.
+
+Skipping or reordering a stage needs a logged decision with a reason. A spike may stop after stage 3 or 4; it still does them in order.
+
 ## Handoff checks
 
+- For items under the build order: each stage's artifact exists, in order, and the implementation cites the stage-3 machine. An implementation that arrives without them is sent back to the missing stage, not reviewed for interleavings.
 - The design checks the brief required are present, with no unresolved "no" row and no old form kept beside its general form.
 - The change is systematic: more than ~3 sites or several layers for one feature is a structure finding that gets a design item.
 
