@@ -30,7 +30,7 @@ Each comes from the user, defaults or the profile.
   3. Handle finished work (below). Check every PR you enqueued: merged, queued or ejected; diagnose an ejection (merge-only conflict or flaky test) and fix or re-enqueue it that tick.
   4. Simplify: stop or defer gates, items, batches and checks that no longer change the outcome, plans built on a false assumption, and deferrable scope; merge batches that can be one. Log each cut with the wall time it saves.
   5. Find multipliers: a per-step cost that repeats across remaining items (CI minutes, merge churn, check time, review rounds). Any check over 10 minutes is a defect to fix, not a timeout to raise. Fix it before feature work; codify any manual step or review finding seen twice (skill `codify`).
-  6. Recompute the critical-path table kept with the records (nodes, edges, remaining time from measured chunks, owner): start every node whose inputs are done, run nodes with no edge between them in parallel, and stop or deprioritize lanes that serve no critical node. Name the node that gates the end date in the report. Fill free slots with unblocked, non-conflicting work on the critical path; leave a slot idle rather than dispatch into a conflict. Each idle slot needs a reason (a dependency, waiting on the user, nothing safe in parallel); otherwise dispatch or ask.
+  6. Recompute the critical-path table kept with the records (nodes, edges, measured remaining time, owner); start every ready node, run independent nodes in parallel, and name the gating node in the report. Fill free slots with unblocked, non-conflicting work on the critical path; leave a slot idle rather than dispatch into a conflict. Each idle slot needs a reason (a dependency, waiting on the user, nothing safe in parallel); otherwise dispatch or ask.
   7. Report.
 - **Report,** plain and in real units:
   1. Progress toward the end-to-end goal: overall percent weighted by remaining effort, then a table of workstreams with percent (merged and written separately when they differ), what remains and wall time left. Lead with time left when items keep uncovering work.
@@ -41,7 +41,7 @@ Each comes from the user, defaults or the profile.
 
 ## Dispatching
 
-When planning a phase, read [failure-patterns.md](references/failure-patterns.md). Before dispatching parallel items, read [integration.md](references/integration.md). Before writing a brief, read [briefs.md](references/briefs.md). When the effort designs or migrates software, also follow [design-efforts.md](references/design-efforts.md) at the steps it names. Split work by file ownership, not plan numbering; feed the critical path first and recompute it as items land. Start downstream items early when their write sets are disjoint. When parallel items overlap on a module, sequence them on one integration branch, foundation first.
+When planning a phase, read [failure-patterns.md](references/failure-patterns.md). Before dispatching parallel items, read [integration.md](references/integration.md). Before writing a brief, read [briefs.md](references/briefs.md). When the effort designs or migrates software, also follow [design-efforts.md](references/design-efforts.md) at the steps it names. Split work by file ownership, not plan numbering. Start downstream items early when their write sets are disjoint. When parallel items overlap on a module, sequence them on one integration branch, foundation first.
 
 ## Handling a handoff
 
