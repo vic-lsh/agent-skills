@@ -25,6 +25,8 @@ Any item that adds or changes state, ownership, a host protocol, scheduling, con
 
 Skipping or reordering a stage needs a logged decision with a reason. A spike may stop after stage 3 or 4; it still does them in order.
 
+- Once the models pass, run two tracks per component: an executable track written once against the ghost machine, with the project's prototype mechanism (assumed contracts, artifact marked unverified) so it wires end to end and is measured on hardware early, and a proof track that removes those assumptions. Never hold hardware bring-up or performance work for proofs.
+
 ## Handoff checks
 
 - For items under the build order: each stage's artifact exists, in order, and the implementation cites the stage-3 machine. An implementation that arrives without them is sent back to the missing stage, not reviewed for interleavings.
