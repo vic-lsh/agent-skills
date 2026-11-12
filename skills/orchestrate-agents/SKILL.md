@@ -26,9 +26,9 @@ Each comes from the user, defaults or the profile.
 - **Fixed cadence, not self-paced:** a `ScheduleWakeup` re-armed after each notification keeps sliding, so check-ins stop. Handle agent notifications as they arrive; the tick still reports on time. Delete the cron job at a stop point or when done, and say so.
 - **Each tick:**
   1. Inspect cheaply: `git fetch`, each branch's recent log, `git status` in each worktree, log mtimes and processes. Never read a running agent's transcript. Stop orphaned processes and containers left by finished agents.
-  2. At dispatch, log each agent's estimated first-commit and handoff times in the ledger. Each tick, diff actual against estimate, track your estimate bias over the effort, and rescale remaining estimates by it. Behind without activity: one steering message, short; still silent ~10 minutes later: stop it and restart on the same model. Behind because scope grew: re-scope or split.
-  3. Handle finished work (below). Check every PR you enqueued: merged, queued or ejected; diagnose an ejection (merge-only conflict or flaky test) and fix or re-enqueue it that tick.
-  4. Simplify: stop or defer gates, items, batches and checks that no longer change the outcome, plans built on a false assumption, and deferrable scope; merge batches that can be one. Log each cut with the wall time it saves.
+  2. At dispatch, log each agent's estimated first-commit and handoff times. Each tick, diff actual against estimate, track your estimate bias and rescale remaining estimates by it. Behind without activity: one short steering message; still silent ~10 minutes later: restart it on the same model. Behind because scope grew: re-scope or split.
+  3. Handle finished work (below). Check every PR you enqueued; diagnose an ejection and fix or re-enqueue it that tick.
+  4. Simplify: stop or defer gates, items and checks that no longer change the outcome, plans built on a false assumption, and deferrable scope. Log each cut with the wall time it saves.
   5. Find multipliers: a per-step cost that repeats across remaining items (CI minutes, merge churn, check time, review rounds). Any check over 10 minutes is a defect to fix, not a timeout to raise. Fix it before feature work; codify any manual step or review finding seen twice (skill `codify`).
   6. Recompute the critical-path table (nodes, edges, measured time, owner); start every ready node, run independent ones in parallel, name the gating node; leave a slot idle rather than dispatch into a conflict. Each idle slot needs a reason (a dependency, waiting on the user, nothing safe in parallel); otherwise dispatch or ask.
   7. Report.
@@ -38,6 +38,7 @@ Each comes from the user, defaults or the profile.
   3. Efficiency: where wall time went, the biggest waste, the top lever with its gain and cost, and what you changed because of it.
   4. Simplification: what was cut and what it saves, or the smallest remaining path.
   5. Agents last, briefly: each one's job relative to the goal; slot use (busy against available slot-minutes since the last report), whether each slot is on the critical path, which are idle and why, and whether fanout and model choices are right. Change something or say why not.
+- **Talking to the user:** under full autonomy, send only tick reports, answers to the user's questions, and questions only the user can decide. Handle notifications, handoffs and redispatches silently: act, log, report at the next tick.
 
 ## Dispatching
 
@@ -58,4 +59,4 @@ Keep a numbered decision log (decision, why, alternatives, follow-ups) and an ef
 
 ## Recovering from a restart
 
-Stopped agents cannot be resumed. Inspect each branch and worktree (pushed commits, uncommitted edits, stray files), start a continuation agent on the same model whose brief states exactly what is pushed and which detached jobs it must adopt, and re-arm the loop.
+Inspect each branch and worktree (pushed commits, uncommitted edits, stray files), start a continuation on the same model whose brief states what is pushed and which detached jobs to adopt, and re-arm the loop.
